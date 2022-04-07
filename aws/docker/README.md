@@ -11,7 +11,7 @@ Make sure you configure your AWS and Lacework provider to point to the correct a
 
 To deploy just run: `terraform init` and  `terraform apply` and make sure you provide the required variables.
 
-## voteapp
+## Deploying the voteapp
 
 To deploy the vote app you need to deploy each of its services via `docker run` commands.
 Be aware that you need to deploy the DB first for the worker to run correctly.
@@ -32,3 +32,32 @@ ssh -i ssh.key ubuntu@$(terraform output -json docker_server_public_ips | jq -r 
 $ docker run -d -p 80:80 --dns $(terraform output -json docker_server_private_ips | jq -r '.[0]') --dns-search service.dc1.consul --name vote detcaccounts/voteapp
 $ docker run -d -p 5001:80 --dns $(terraform output -json docker_server_private_ips | jq -r '.[0]') --dns-search service.dc1.consul --name result detcaccounts/resultsapp
 ```
+
+## Registring Consul Services
+For each of the micro services, register it within  Consul by creating the configuration files:
+
+```bash
+$ echo '{
+  "service": {
+    "id": "vote",
+    "name": "vote",
+    "address": "$(terraform output -json docker_server_private_ips | jq -r '.[0]')",
+    "meta": {
+      "meta": "vote"
+    },
+    "tagged_addresses": {
+      "lan": {
+        "address": "$(terraform output -json docker_server_private_ips | jq -r '.[0]')",
+        "port": 80
+      }
+    },
+    "port": 80
+  }
+}' > ./vote.json
+```
+
+```bash
+$ consul services register vote.json
+```
+
+
