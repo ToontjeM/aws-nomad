@@ -103,7 +103,7 @@ module "nomad_iam_instance_profile" {
   source           = "git::https://github.com/timarenz/terraform-aws-iam-instance-profile.git?ref=v0.1.0"
   environment_name = var.environment_name
   owner_name       = var.owner_name
-  name             = "${var.environment_name}-iam-instance-profile"
+  name             = "${var.owner_name}-${var.environment_name}-iam-instance-profile"
 }
 
 data "aws_ami" "ubuntu" {
