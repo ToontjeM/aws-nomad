@@ -1,10 +1,11 @@
 variable "environment_name" {
   type    = string
-  default = "nomad"
+  default = "ton_nomad"
 }
 
 variable "owner_name" {
   type = string
+  default = "ton"
 }
 
 variable "aws_region" {

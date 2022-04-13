@@ -4,7 +4,7 @@ provider "aws" {
 
 provider "lacework" {}
 
-data "lacework_agent_access_token" "nomad" {
+data "lacework_agent_access_token" "testing" {
   name = var.lacework_agent_token_name
 }
 
@@ -25,7 +25,7 @@ resource "local_file" "ssh" {
 }
 
 resource "aws_key_pair" "ssh" {
-  key_name   = "${var.environment_name}-${var.owner_name}-ssh"
+  key_name   = "${var.owner_name}-${var.environment_name}-ssh"
   public_key = tls_private_key.ssh.public_key_openssh
 }
 
