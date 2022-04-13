@@ -40,7 +40,7 @@ module "nomad_security_group" {
   source           = "git::https://github.com/timarenz/terraform-aws-security-group.git?ref=v0.1.0"
   environment_name = var.environment_name
   owner_name       = var.owner_name
-  name             = "${var.environment_name}-sg"
+  name             = "${var.owner_name}-${var.environment_name}-sg"
   vpc_id           = module.aws.vpc_id
   ingress_rules = [{
     protocol         = "tcp"
@@ -170,9 +170,9 @@ resource "null_resource" "nomad_server" {
 
   provisioner "remote-exec" {
     inline = [
-      "curl -sSL https://s3-us-west-2.amazonaws.com/www.lacework.net/download/4.3.0.5556_2021-10-04_release-v4.3_c4bb0ab95f6129749e61be26afb4b9d503c11522/install.sh > /tmp/lw-install.sh",
+      "curl -sSL https://lwinttonhome.lacework.net/mgr/v1/download/8383e6c927c6d2e100ce184ee3d52a0190ba4b54f7f4424747f52659/install.sh > /tmp/lw-install.sh",
       "chmod +x /tmp/lw-install.sh",
-      "sudo /tmp/lw-install.sh -U https://api.fra.lacework.net ${data.lacework_agent_access_token.nomad.token}",
+      "sudo /tmp/lw-install.sh -U https://api.lacework.net ${data.lacework_agent_access_token.nomad.token}",
       "rm -rf /tmp/lw-install.sh"
     ]
   }
@@ -231,9 +231,9 @@ resource "null_resource" "nomad_client" {
 
   provisioner "remote-exec" {
     inline = [
-      "curl -sSL https://s3-us-west-2.amazonaws.com/www.lacework.net/download/4.3.0.5556_2021-10-04_release-v4.3_c4bb0ab95f6129749e61be26afb4b9d503c11522/install.sh > /tmp/lw-install.sh",
+      "curl -sSL https://lwinttonhome.lacework.net/mgr/v1/download/8383e6c927c6d2e100ce184ee3d52a0190ba4b54f7f4424747f52659/install.sh > /tmp/lw-install.sh",
       "chmod +x /tmp/lw-install.sh",
-      "sudo /tmp/lw-install.sh -U https://api.fra.lacework.net ${data.lacework_agent_access_token.nomad.token}",
+      "sudo /tmp/lw-install.sh -U https://api.lacework.net ${data.lacework_agent_access_token.nomad.token}",
       "rm -rf /tmp/lw-install.sh"
     ]
   }
